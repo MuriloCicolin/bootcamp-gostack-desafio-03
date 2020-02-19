@@ -60,7 +60,7 @@ class DeliverymanController {
       return res.status(401).json({ error: 'Validation fails' });
     }
 
-    const { email, name, avatar_id } = req.body;
+    const { email } = req.body;
     const { id } = req.params;
 
     const user = await Deliveryman.findByPk(id);
