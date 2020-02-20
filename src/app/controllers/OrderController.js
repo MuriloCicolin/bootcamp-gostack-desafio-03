@@ -7,8 +7,12 @@ import OrderMail from '../Jobs/OrderMail';
 
 class OrderController {
   async index(req, res) {
+    const { page = 1 } = req.query;
+
     const orders = await Order.findAll({
       attributes: ['recipient_id', 'deliveryman_id', 'product'],
+      limit: 20,
+      offset: (page - 1) * 20,
       include: [
         {
           model: Deliveryman,
