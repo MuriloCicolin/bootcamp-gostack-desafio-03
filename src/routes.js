@@ -8,6 +8,8 @@ import DeliverymanController from './app/controllers/DeliverymanController';
 import FileController from './app/controllers/FileController';
 import multerConfig from './config/multer';
 import Deliveryman from './app/models/Deliveryman';
+import OrderController from './app/controllers/OrderController';
+import Order from './app/models/Order';
 
 const routes = new Router();
 const upload = multer(multerConfig);
@@ -28,5 +30,9 @@ routes.post('/deliverymen', DeliverymanController.store);
 routes.get('/deliverymen', DeliverymanController.index);
 routes.put('/deliverymen/:id', DeliverymanController.update);
 routes.delete('/deliverymen/:id', DeliverymanController.delete);
+
+routes.post('/orders', OrderController.store);
+routes.put('/orders/:id', OrderController.update);
+routes.delete('/orders/:id', OrderController.delete);
 
 export default routes;
