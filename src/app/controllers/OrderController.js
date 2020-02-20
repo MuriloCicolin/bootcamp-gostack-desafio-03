@@ -6,6 +6,24 @@ import Queue from '../../lib/Queue';
 import OrderMail from '../Jobs/OrderMail';
 
 class OrderController {
+  async index(req, res) {
+    const orders = await Order.findAll({
+      attributes: ['recipient_id', 'deliveryman_id', 'product'],
+      include: [
+        {
+          model: Deliveryman,
+          attributes: ['name', 'email'],
+        },
+        {
+          model: Recipient,
+          attributes: ['name', 'street', 'number', 'cep', 'city', 'state'],
+        },
+      ],
+    });
+
+    return res.json(orders);
+  }
+
   async store(req, res) {
     const schema = Yup.object().shape({
       deliveryman_id: Yup.number().required(),
