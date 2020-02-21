@@ -23,9 +23,11 @@ class Order extends Model {
     });
     this.belongsTo(models.Deliveryman, {
       foreignKey: 'deliveryman_id',
+      as: 'deliverymen',
     });
     this.belongsTo(models.Recipient, {
       foreignKey: 'recipient_id',
+      as: 'recipient',
     });
   }
 }

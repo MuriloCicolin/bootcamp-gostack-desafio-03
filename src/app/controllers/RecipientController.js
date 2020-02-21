@@ -2,6 +2,26 @@ import * as Yup from 'yup';
 import Recipient from '../models/Recipient';
 
 class RecipientController {
+  async index(req, res) {
+    const recipient = await Recipient.findAll();
+
+    return res.json(recipient);
+  }
+
+  async show(req, res) {
+    const { id } = req.params;
+    const recipient = await Recipient.findOne({
+      where: {
+        id,
+      },
+    });
+    if (!recipient) {
+      return res.status(401).json({ error: 'Recipient not found!' });
+    }
+
+    return res.json(recipient);
+  }
+
   async store(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
@@ -33,17 +53,13 @@ class RecipientController {
   }
 
   async update(req, res) {
-    const recipients = await Recipient.findByPk(req.userId);
+    const { id } = req.params;
 
-    const {
-      id,
-      name,
-      street,
-      number,
-      state,
-      city,
-      cep,
-    } = await recipients.update(req.body);
+    const recipients = await Recipient.findByPk(id);
+
+    const { name, street, number, state, city, cep } = await recipients.update(
+      req.body
+    );
 
     return res.json({
       recipients: {

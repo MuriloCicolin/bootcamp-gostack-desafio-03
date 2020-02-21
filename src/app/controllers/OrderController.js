@@ -16,10 +16,12 @@ class OrderController {
       include: [
         {
           model: Deliveryman,
+          as: 'deliverymen',
           attributes: ['name', 'email'],
         },
         {
           model: Recipient,
+          as: 'recipient',
           attributes: ['name', 'street', 'number', 'cep', 'city', 'state'],
         },
       ],

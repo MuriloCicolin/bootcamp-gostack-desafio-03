@@ -22,7 +22,9 @@ routes.use(authMiddleware);
 routes.put('/sessions', SessionController.update);
 
 routes.post('/recipients', RecipientController.store);
-routes.put('/recipients', RecipientController.update);
+routes.put('/recipients/:id', RecipientController.update);
+routes.get('/recipients', RecipientController.index);
+routes.get('/recipients/:id', RecipientController.show);
 
 routes.post('/files', upload.single('file'), FileController.store);
 
