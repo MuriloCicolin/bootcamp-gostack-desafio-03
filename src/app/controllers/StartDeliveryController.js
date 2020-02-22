@@ -7,11 +7,20 @@ import {
   isAfter,
 } from 'date-fns';
 import { Op } from 'sequelize';
+import * as Yup from 'yup';
 import Order from '../models/Order';
 import Deliveryman from '../models/Deliveryman';
 
-class StartControllerDelivery {
+class StartDeliveryController {
   async update(req, res) {
+    const schema = Yup.object().shape({
+      start_date: Yup.date().required(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validation Fails' });
+    }
+
     const { start_date } = req.body;
     const { deliveryman_id, delivery_id } = req.params;
 
@@ -53,7 +62,7 @@ class StartControllerDelivery {
       },
     });
 
-    if (countDelivery.length >= 5) {
+    if (countDelivery.length > 5) {
       return res.status(401).json({
         error: 'It is not possible to withdraw more than 5 times a day',
       });
@@ -65,4 +74,4 @@ class StartControllerDelivery {
   }
 }
 
-export default new StartControllerDelivery();
+export default new StartDeliveryController();
