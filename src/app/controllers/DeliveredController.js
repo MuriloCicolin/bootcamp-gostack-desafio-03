@@ -1,9 +1,8 @@
 import { Op } from 'sequelize';
 import Order from '../models/Order';
 import Deliveryman from '../models/Deliveryman';
-import Recipient from '../models/Recipient';
 
-class DeliveriesDeliveredController {
+class DeliveredController {
   async index(req, res) {
     const { page = 1 } = req.query;
 
@@ -34,4 +33,4 @@ class DeliveriesDeliveredController {
   }
 }
 
-export default new DeliveriesDeliveredController();
+export default new DeliveredController();

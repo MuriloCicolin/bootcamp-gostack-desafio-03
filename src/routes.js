@@ -10,7 +10,7 @@ import multerConfig from './config/multer';
 import OrderController from './app/controllers/OrderController';
 import StartController from './app/controllers/StartDeliveryController';
 import OpenDeliveriesController from './app/controllers/OpenDeliveriesController';
-import DeliveriesDeliveredController from './app/controllers/DeliveriesDeliveredController';
+import DeliveredController from './app/controllers/DeliveredController';
 import EndDeliveryController from './app/controllers/EndDeliveryController';
 
 const routes = new Router();
@@ -35,10 +35,7 @@ routes.get(
   OpenDeliveriesController.show
 );
 
-routes.get(
-  '/deliveryman/:deliverymanId/deliveries',
-  DeliveriesDeliveredController.index
-);
+routes.get('/deliveryman/:deliverymanId/deliveries', DeliveredController.index);
 
 routes.use(authMiddleware);
 
