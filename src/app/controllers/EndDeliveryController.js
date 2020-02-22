@@ -1,19 +1,9 @@
-import { parseISO } from 'date-fns';
-import * as Yup from 'Yup';
 import Order from '../models/Order';
 import Deliveryman from '../models/Deliveryman';
+import File from '../models/File';
 
-class EndDeliveryContrller {
+class EndDeliveryController {
   async update(req, res) {
-    const schema = Yup.object().shape({
-      end_date: Yup.date().required(),
-      signature_id: Yup.number().required(),
-    });
-
-    if (!(await schema.isValid(req.body))) {
-      return res.status(400).json({ error: 'Validation Fails' });
-    }
-    const { end_date, signature_id } = req.body;
     const { deliveryman_id, delivery_id } = req.params;
 
     const delivery = await Order.findByPk(delivery_id);
@@ -28,15 +18,26 @@ class EndDeliveryContrller {
       return res.status(401).json({ error: 'Deliveryman not found' });
     }
 
-    const dateEnd = parseISO(end_date);
+    if (!req.file) {
+      return res
+        .status(400)
+        .json({ error: 'You must send a signature picture' });
+    }
+
+    const { filename: path, originalname: name } = req.file;
+
+    const file = await File.create({
+      name,
+      path,
+    });
 
     await delivery.update({
-      end_date: dateEnd,
-      signature_id,
+      end_date: new Date(),
+      signature_id: file.id,
     });
 
     return res.json(delivery);
   }
 }
 
-export default new EndDeliveryContrller();
+export default new EndDeliveryController();
