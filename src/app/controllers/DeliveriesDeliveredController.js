@@ -5,6 +5,8 @@ import Recipient from '../models/Recipient';
 
 class DeliveriesDeliveredController {
   async index(req, res) {
+    const { page = 1 } = req.query;
+
     const { deliverymanId } = req.params;
 
     const deliveryman = await Deliveryman.findByPk(deliverymanId);
@@ -14,38 +16,18 @@ class DeliveriesDeliveredController {
     }
 
     const delivery = await Order.findAll({
+      limit: 20,
+      offset: (page - 1) * 20,
       where: {
-        deliveryman_id: deliverymanId,
         canceled_at: null,
+        deliveryman_id: deliverymanId,
+        start_date: {
+          [Op.ne]: null,
+        },
         end_date: {
           [Op.ne]: null,
         },
       },
-      attributes: [
-        'id',
-        'product',
-        'canceled_at',
-        'start_date',
-        'end_date',
-        'signature_id',
-        'deliveryman_id',
-        'recipient_id',
-      ],
-      include: [
-        {
-          model: Recipient,
-          as: 'recipient',
-          attributes: [
-            'name',
-            'street',
-            'number',
-            'complement',
-            'state',
-            'city',
-            'cep',
-          ],
-        },
-      ],
     });
 
     return res.json(delivery);
