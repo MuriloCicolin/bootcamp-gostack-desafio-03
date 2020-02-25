@@ -86,7 +86,7 @@ class DeliveryProblemsController {
       deliveryman,
     });
 
-    return res.json(deliveryProblem);
+    return res.send(deliveryProblem);
   }
 }
 
