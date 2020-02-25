@@ -2,6 +2,9 @@ import * as Yup from 'yup';
 import { Op } from 'sequelize';
 import Order from '../models/Order';
 import DeliveryProblems from '../models/DeliveryProblems';
+import Deliveryman from '../models/Deliveryman';
+import Queue from '../../lib/Queue';
+import CancellationMail from '../Jobs/CancellationMail';
 
 class DeliveryProblemsController {
   async index(req, res) {
@@ -57,6 +60,33 @@ class DeliveryProblemsController {
     });
 
     return res.json(problems);
+  }
+
+  async delete(req, res) {
+    const { delivery_id } = req.params;
+
+    const deliveryProblem = await DeliveryProblems.findByPk(delivery_id);
+
+    if (!deliveryProblem) {
+      return res.status(400).json({ error: 'Delivery not exists' });
+    }
+
+    const order = await Order.findByPk(deliveryProblem.delivery_id);
+
+    const deliveryman = await Deliveryman.findByPk(order.deliveryman_id);
+
+    await deliveryProblem.update({
+      canceled_at: new Date(),
+    });
+
+    deliveryProblem.save();
+
+    await Queue.add(CancellationMail.key, {
+      order,
+      deliveryman,
+    });
+
+    return res.json(deliveryProblem);
   }
 }
 

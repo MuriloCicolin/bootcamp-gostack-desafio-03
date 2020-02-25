@@ -5,6 +5,7 @@ class DeliveryProblems extends Model {
     super.init(
       {
         description: Sequelize.STRING,
+        canceled_at: Sequelize.DATE,
       },
       {
         sequelize,
