@@ -70,7 +70,7 @@ class StartDeliveryController {
 
     await delivery.update(req.body);
 
-    return res.json(countDelivery);
+    return res.json(delivery);
   }
 }
 

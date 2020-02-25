@@ -18,6 +18,12 @@ class EndDeliveryController {
       return res.status(401).json({ error: 'Deliveryman not found' });
     }
 
+    if (delivery.end_date < delivery.start_date) {
+      return res.status(401).json({
+        error: 'The delivery close date is greater than the start date',
+      });
+    }
+
     if (!req.file) {
       return res
         .status(400)

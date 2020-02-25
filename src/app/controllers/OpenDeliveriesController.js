@@ -4,6 +4,7 @@ import Recipient from '../models/Recipient';
 
 class OpenDeliveriesController {
   async show(req, res) {
+    const { page = 1 } = req.query;
     const { deliverymanId } = req.params;
 
     const deliveryman = await Deliveryman.findByPk(deliverymanId);
@@ -13,6 +14,8 @@ class OpenDeliveriesController {
     }
 
     const delivery = await Order.findAll({
+      limit: 10,
+      offset: (page - 1) * 10,
       where: {
         deliveryman_id: deliverymanId,
         canceled_at: null,

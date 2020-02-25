@@ -3,7 +3,7 @@ import Order from '../models/Order';
 import Deliveryman from '../models/Deliveryman';
 
 class DeliveredController {
-  async index(req, res) {
+  async show(req, res) {
     const { page = 1 } = req.query;
 
     const { deliverymanId } = req.params;

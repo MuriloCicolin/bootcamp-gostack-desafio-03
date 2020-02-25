@@ -12,6 +12,7 @@ import StartController from './app/controllers/StartDeliveryController';
 import OpenDeliveriesController from './app/controllers/OpenDeliveriesController';
 import DeliveredController from './app/controllers/DeliveredController';
 import EndDeliveryController from './app/controllers/EndDeliveryController';
+import DeliveryProblems from './app/controllers/DeliveryProblemsController';
 
 const routes = new Router();
 const upload = multer(multerConfig);
@@ -31,11 +32,15 @@ routes.put(
 );
 
 routes.get(
-  '/deliveryman/:deliverymanId/deliveries',
+  '/deliveryman/:deliverymanId/deliveries/open',
   OpenDeliveriesController.show
 );
 
-routes.get('/deliveryman/:deliverymanId/deliveries', DeliveredController.index);
+routes.get('/deliveryman/:deliverymanId/deliveries', DeliveredController.show);
+
+routes.post('/delivery/:delivery_id/problems', DeliveryProblems.store);
+routes.get('/delivery/problems', DeliveryProblems.index);
+routes.get('/delivery/:delivery_id/problems', DeliveryProblems.show);
 
 routes.use(authMiddleware);
 
